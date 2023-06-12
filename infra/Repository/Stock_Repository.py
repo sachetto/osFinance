@@ -9,13 +9,13 @@ class StockRepository:
         
     def AddStock(self, new_stock):
         with DBConnectionHandler() as db:
-            entry = self.__checkIfExistInDatabase(\
+            entry = self.__checkIfStockExistInDatabase(\
                 new_stock)
             
             if entry is None:
                 db.Section.add(new_stock)
 
-    def __checkIfExistInDatabase(self, stock):
+    def __checkIfStockExistInDatabase(self, stock):
         with DBConnectionHandler() as db:
             existing_entry = db.Section.\
                 query(Stock).\
