@@ -1,5 +1,6 @@
 from infra.Config.Base import Base
-from sqlalchemy import Column, Integer, String, Date, Float
+from sqlalchemy import Column, Integer, String\
+    , Date, Float
 
 # Define the class representing the table
 class Share(Base):
