@@ -22,19 +22,59 @@ stock = share_repo.SelectOperationsFrom("BOVA11")
 data = share_repo.GetLastShareData()
 # print(data)
 
-
+# *******************************************************
+# From all orders, get distincts Stock and sabe in a 
+# table
+# *******************************************************
 def UpdateStockTable(stock_list, stock_repo):
     for stock in stock_list:
         stock_to_insert = Stock(Ticker=stock[0],\
                                  Company=stock[1],\
                                  Price=0.0,\
                                  Category="UNDEFINED")
-        
+
         stock_repo.Insert(stock_to_insert)
 
-UpdateStockTable(stock_and_name, stock_repo)
-data = stock_repo.Select()
-print(data)
+# UpdateStockTable(stock_and_name, stock_repo)
+# data = stock_repo.Select()
+# print(data)
+
+
+# *******************************************************
+# Test update table
+# *******************************************************
+def Test_Update():
+    data = stock_repo.SelectSpecific("B3SA3")
+    print(data[0])
+    
+    stock = stock_repo.SelectSpecific("B3SA3")
+
+    new_stock = Stock(Ticker=stock[0].Ticker,\
+                      Company=stock[0].Company,\
+                      Price=0.0,\
+                      Category="STOCK")
+    
+    stock_repo.Update("B3SA3", new_stock)
+
+    data = stock_repo.SelectSpecific("B3SA3")
+    print(data[0])
+
+# Test_Update()
+
+# *******************************************************
+# Test delete table
+# *******************************************************
+def Test_Delete():
+    data = stock_repo.Select()
+    print(data)
+    
+    stock_repo.Delete("B3SA3")
+
+    data = stock_repo.Select()
+    print(data)
+
+# Test_Delete()
+
 
 # ********** TESTE DO INSPECTOR **********
 with DBConnectionHandler() as db:
