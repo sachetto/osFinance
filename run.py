@@ -1,6 +1,8 @@
+from datetime import datetime
 from infra.Repository.Share_Repository import ShareRepository
 from infra.Repository.Stock_Repository import StockRepository
 from infra.Entities.Stock import Stock
+from infra.Entities.Share import Share
 from infra.Config.Connection import DBConnectionHandler
 from infra.Config.Inspection import DBInspection
 
@@ -21,6 +23,28 @@ stock = share_repo.SelectOperationsFrom("BOVA11")
 
 data = share_repo.GetLastShareData()
 # print(data)
+
+# *******************************************************
+# Test add new share into repo
+# *******************************************************
+def Test_Add_Share():
+    date = "2023-06-13"
+    date_obj = datetime.strptime(date, '%Y-%m-%d').date()
+
+    new_share = Share(data=date_obj,
+                      tipo="C",
+                      titulo="OI ON N1",
+                      ticker="OIBR3",
+                      qnt=30.0,
+                      preco=1.2)
+    
+    share_repo.Insert(new_share)
+
+    data = share_repo.Select()
+    print(data[-2])
+    print(data[-1])
+
+# Test_Add_Share()
 
 # *******************************************************
 # From all orders, get distincts Stock and sabe in a 

@@ -30,6 +30,11 @@ class ShareRepository:
             data = [[value[0], value[1]] for value in data]
             return data
 
+    def Insert(self, new_share):
+        with DBConnectionHandler() as db:
+            db.Section.add(new_share)
+            db.Section.commit()
+
     def GetLastShareData(self):
         with DBConnectionHandler() as db:
             data = db.Section.query(Share.data)\

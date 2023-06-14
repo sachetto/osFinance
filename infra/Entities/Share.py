@@ -6,7 +6,7 @@ from sqlalchemy import Column, Integer, String\
 class Share(Base):
     __tablename__ = 'ordens'
 
-    indice = Column(Integer, primary_key=True)
+    indice = Column(Integer, primary_key=True, autoincrement=True)
     data = Column(Date)
     tipo = Column(String)
     titulo = Column(String)
