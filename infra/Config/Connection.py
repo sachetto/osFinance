@@ -2,8 +2,8 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
 class DBConnectionHandler:
-    def __init__(self) -> None:
-        self.__connection_string = "sqlite:///bancodedados.db"
+    def __init__(self, database_path) -> None:
+        self.__connection_string = "sqlite:///" + database_path
         self.__engine = self.__create_database_engine()
         self.Section = None
 
