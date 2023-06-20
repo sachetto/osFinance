@@ -1,7 +1,7 @@
 # ********************************************
-#               Stock:
+#               Asset:
 # ********************************************
-class Stock:
+class Asset:
   def __init__(self, symbol, company_name):
     self.symbol = symbol
     self.company_name = company_name
@@ -48,9 +48,9 @@ class Wallet:
 # ********************************************
 #               Classes de Testes:
 # ********************************************  
-class Test_Stock:
+class Test_Asset:
   def __init__(self):
-    self.XPTO11 = Stock("XPTO11", "XP Tolando")
+    self.XPTO11 = Asset("XPTO11", "XP Tolando")
     
   def Test_Print(self): 
     self.XPTO11.Print()

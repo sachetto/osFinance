@@ -1,25 +1,25 @@
 from datetime import datetime
 from infra.Repository.Share_Repository import ShareRepository
-from infra.Repository.Stock_Repository import StockRepository
-from infra.Entities.Stock import Stock
+from infra.Repository.Asset_Repository import AssetRepository
+from infra.Entities.Asset import Asset
 from infra.Entities.Share import Share
 from infra.Config.Connection import DBConnectionHandler
 from infra.Config.Inspection import DBInspection
 
 share_repo = ShareRepository()
-stock_repo = StockRepository()
+asset_repo = AssetRepository()
 
 # data = share_repo.Select()
 # print(data)
 
-stocks_ticker = share_repo.SelectDistinctSymbols()
-# print(stocks_ticker)
+assets_ticker = share_repo.SelectDistinctSymbols()
+# print(assets_ticker)
 
-stock_and_name = share_repo.SelectDistinctSymbolsAndName()
-# print(stock_and_name)
+asset_and_name = share_repo.SelectDistinctSymbolsAndName()
+# print(asset_and_name)
 
-stock = share_repo.SelectOperationsFrom("BOVA11")
-# print(stock)
+asset = share_repo.SelectOperationsFrom("BOVA11")
+# print(asset)
 
 data = share_repo.GetLastShareData()
 # print(data)
@@ -47,20 +47,20 @@ def Test_Add_Share():
 # Test_Add_Share()
 
 # *******************************************************
-# From all orders, get distincts Stock and sabe in a 
+# From all orders, get distincts Asset and sabe in a 
 # table
 # *******************************************************
-def UpdateStockTable(stock_list, stock_repo):
-    for stock in stock_list:
-        stock_to_insert = Stock(Ticker=stock[0],\
-                                 Company=stock[1],\
+def UpdateAssetTable(asset_list, asset_repo):
+    for asset in asset_list:
+        asset_to_insert = Asset(Ticker=asset[0],\
+                                 Company=asset[1],\
                                  Price=0.0,\
                                  Category="UNDEFINED")
 
-        stock_repo.Insert(stock_to_insert)
+        asset_repo.Insert(asset_to_insert)
 
-# UpdateStockTable(stock_and_name, stock_repo)
-# data = stock_repo.Select()
+# UpdateAssetTable(asset_and_name, asset_repo)
+# data = asset_repo.Select()
 # print(data)
 
 
@@ -68,19 +68,19 @@ def UpdateStockTable(stock_list, stock_repo):
 # Test update table
 # *******************************************************
 def Test_Update():
-    data = stock_repo.SelectSpecific("B3SA3")
+    data = asset_repo.SelectSpecific("B3SA3")
     print(data[0])
     
-    stock = stock_repo.SelectSpecific("B3SA3")
+    asset = asset_repo.SelectSpecific("B3SA3")
 
-    new_stock = Stock(Ticker=stock[0].Ticker,\
-                      Company=stock[0].Company,\
+    new_asset = Asset(Ticker=asset[0].Ticker,\
+                      Company=asset[0].Company,\
                       Price=0.0,\
-                      Category="STOCK")
+                      Category="asset")
     
-    stock_repo.Update("B3SA3", new_stock)
+    asset_repo.Update("B3SA3", new_asset)
 
-    data = stock_repo.SelectSpecific("B3SA3")
+    data = asset_repo.SelectSpecific("B3SA3")
     print(data[0])
 
 # Test_Update()
@@ -89,12 +89,12 @@ def Test_Update():
 # Test delete table
 # *******************************************************
 def Test_Delete():
-    data = stock_repo.Select()
+    data = asset_repo.Select()
     print(data)
     
-    stock_repo.Delete("B3SA3")
+    asset_repo.Delete("B3SA3")
 
-    data = stock_repo.Select()
+    data = asset_repo.Select()
     print(data)
 
 # Test_Delete()
@@ -104,7 +104,7 @@ def Test_Delete():
 with DBConnectionHandler() as db:
     inspec = DBInspection(db)
 
-    if inspec.TableExists("stock"):
+    if inspec.TableExists("asset"):
         print("exist")
     else:
         print("does not exist")

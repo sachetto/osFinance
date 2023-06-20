@@ -92,10 +92,10 @@ def DefineChavePrimariaNoDaTabela(conexao, tabela, chave):
   except:
     print("Erro ao criar chave primária")
 
-def CriaTabelaDeStock(conexao):
+def CriaTabelaDeAsset(conexao):
   try:
     cursor = conexao.cursor()
-    cursor.execute(f"CREATE TABLE stock (Id INTEGER PRIMARY KEY AUTOINCREMENT, Ticker TEXT, Company TEXT, Price REAL, Category TEXT)")
+    cursor.execute(f"CREATE TABLE asset (Id INTEGER PRIMARY KEY AUTOINCREMENT, Ticker TEXT, Company TEXT, Price REAL, Category TEXT)")
     conexao.commit()
   except:
     print("Erro ao criar a tabela de ações")
@@ -119,7 +119,7 @@ def SetupDoBanco():
 
   CriaUmaTabelaDeOrdensNoBancoComBaseNoDataframe(conn, "ordens", df_ordens)
   DefineChavePrimariaNoDaTabela(conn, "ordens", "Indice")
-  CriaTabelaDeStock(conn)
+  CriaTabelaDeAsset(conn)
 
   conn.close()
 
@@ -134,7 +134,7 @@ def SetupDoBanco():
 
 
 conn = sqlite3.connect("bancodedados.db")
-CriaTabelaDeStock(conn)
+CriaTabelaDeAsset(conn)
 conn.close()
 
 # cursor = conn.cursor()
@@ -151,6 +151,6 @@ conn.close()
 # ********************************************
 #               Alguns Testes:
 # ********************************************
-# Test_Stock().Test_Print()
+# Test_Asset().Test_Print()
 # Test_Database().Test_GetDistinctValues()
 # Test_Database().Test_QueryWhithWhere()
