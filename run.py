@@ -12,8 +12,8 @@ asset_repo = AssetRepository()
 # data = share_repo.Select()
 # print(data)
 
-assets_ticker = share_repo.SelectDistinctSymbols()
-# print(assets_ticker)
+assets_symbol = share_repo.SelectDistinctSymbols()
+# print(assets_symbol)
 
 asset_and_name = share_repo.SelectDistinctSymbolsAndName()
 # print(asset_and_name)
@@ -34,7 +34,7 @@ def Test_Add_Share():
     new_share = Share(data=date_obj,
                       tipo="C",
                       titulo="OI ON N1",
-                      ticker="OIBR3",
+                      symbol="OIBR3",
                       qnt=30.0,
                       preco=1.2)
     
@@ -52,7 +52,7 @@ def Test_Add_Share():
 # *******************************************************
 def UpdateAssetTable(asset_list, asset_repo):
     for asset in asset_list:
-        asset_to_insert = Asset(Ticker=asset[0],\
+        asset_to_insert = Asset(Symbol=asset[0],\
                                  Company=asset[1],\
                                  Price=0.0,\
                                  Category="UNDEFINED")
@@ -73,7 +73,7 @@ def Test_Update():
     
     asset = asset_repo.SelectSpecific("B3SA3")
 
-    new_asset = Asset(Ticker=asset[0].Ticker,\
+    new_asset = Asset(Symbol=asset[0].Symbol,\
                       Company=asset[0].Company,\
                       Price=0.0,\
                       Category="asset")

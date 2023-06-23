@@ -14,12 +14,12 @@ class Operation(Base):
     data = Column(Date)
     tipo = Column(String)
     titulo = Column(String)
-    ticker = Column(String)
+    symbol = Column(String)
     qnt = Column(Integer)
     preco = Column(Float)
 
     def __repr__(self):
-        return f"<Operation(id={self.id}, indice='{self.indice}', data='{self.data}', tipo='{self.tipo}', titulo='{self.titulo}', ticker='{self.ticker}', qnt={self.qnt}, preco={self.preco})>"
+        return f"<Operation(id={self.id}, indice='{self.indice}', data='{self.data}', tipo='{self.tipo}', titulo='{self.titulo}', symbol='{self.symbol}', qnt={self.qnt}, preco={self.preco})>"
 
 # Create the table in the database (if it doesn't exist)
 Base.metadata.create_all(engine)

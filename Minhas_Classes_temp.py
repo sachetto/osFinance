@@ -10,7 +10,7 @@ class Asset:
     
   def Print(self):
     print("Empresa: " + self.company_name)
-    print("Ticker: " + self.symbol)
+    print("Symbol: " + self.symbol)
     print("Preço de tela: R$" + str(self.current_price))
     print("Categoria: " + self.category)
 
