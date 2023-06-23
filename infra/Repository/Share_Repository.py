@@ -1,5 +1,5 @@
-from infra.Config.Connection import DBConnectionHandler
-from infra.Entities.Share import Share
+from Config.Connection import DBConnectionHandler
+from Entities.Share import Share
 
 class ShareRepository:
     def Select(self):

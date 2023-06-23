@@ -1,21 +1,31 @@
-from infra.Config.Base import Base
-from sqlalchemy import Column, Integer, String\
-    , Date, Float
+from Config.Base import Base
+from sqlalchemy import Column, Integer\
+    , Date, Float, String, ForeignKey
+from sqlalchemy.orm import relationship
 
 # Define the class representing the table
 class Share(Base):
-    __tablename__ = 'ordens'
+    __tablename__ = 'Share'
 
-    indice = Column(Integer, primary_key=True, autoincrement=True)
-    data = Column(Date)
-    tipo = Column(String)
-    titulo = Column(String)
-    symbol = Column(String)
-    qnt = Column(Float)
-    preco = Column(Float)
+    Id = Column(Integer, primary_key=True, autoincrement=True)
+    Date = Column(Date)
+    Amount = Column(Integer)
+    Total_Value = Column(Float)
+    Type = Column(String)
+    Asset_Id = Column(Integer, ForeignKey('Asset.Id'))
+
+    Asset = relationship("Asset")
+
+    def __init__(self, date, amout, total_value, type, asset_id):
+        self.Date = date
+        self.Amount = amout
+        self.Total_Value = total_value
+        self.Type = type
+        self.Asset_Id = asset_id
 
     def __repr__(self):
-        return f"<Share (indice='{self.indice}', \
-                data='{self.data}', tipo='{self.tipo}', \
-                titulo='{self.titulo}', symbol='{self.symbol}', \
-                qnt={self.qnt}, preco={self.preco})>\n"
+        return f"<Share: Id='{self.Id}', \
+                Date='{self.Date}', Asset='{self.Asset}',\
+                Amount='{self.Amount}', \
+                Total_Value='{self.Total_Value}',\
+                Type='{self.Type}'\n>"
