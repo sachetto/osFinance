@@ -10,12 +10,12 @@ class ShareRepository:
     def SelectOperationsFrom(self, symbol):
         with DBConnectionHandler() as db:
             rows = db.Section.query(Share)\
-                .filter(Share.ticker == symbol).all()
+                .filter(Share.symbol == symbol).all()
             return rows
         
     def SelectDistinctSymbols(self):
         with DBConnectionHandler() as db:
-            data = db.Section.query(Share.ticker).distinct().all()
+            data = db.Section.query(Share.symbol).distinct().all()
             
             # Get the distinct values as a list using list comprehension
             data = [value[0] for value in data]
@@ -23,7 +23,7 @@ class ShareRepository:
    
     def SelectDistinctSymbolsAndName(self):
         with DBConnectionHandler() as db:
-            data = db.Section.query(Share.ticker, Share.titulo)\
+            data = db.Section.query(Share.symbol, Share.titulo)\
                 .distinct().all()
             
             # Get the distinct values as a list using list comprehension
