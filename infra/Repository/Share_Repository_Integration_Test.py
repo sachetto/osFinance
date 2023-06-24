@@ -31,6 +31,37 @@ def __RemoveTableFromDatabase():
         Asset.metadata.drop_all(engine)
         Category.metadata.drop_all(engine)
 
+def SelectAll_Test(repo):
+    shares = repo.Select()
+
+    if shares[0].Asset.Symbol == "B3SA3" and\
+       shares[0].Asset.Company_Name == "B3 SA" and\
+       shares[0].Date == date_obj1 and\
+       shares[0].Amount == 10 and\
+       shares[0].Total_Value == 300.00 and\
+       shares[0].Type == "BUY" and\
+       shares[1].Asset.Symbol == "KNCR11" and\
+       shares[1].Asset.Company_Name == "FII KINEA RI CI" and\
+       shares[1].Date == date_obj2 and\
+       shares[1].Amount == 100 and\
+       shares[1].Total_Value == 200.00 and\
+       shares[1].Type == "SELL":
+        print("Select_Test - PASSED")
+    else:
+        print("Select_Test - FAILED")
+    return shares
+
+def Print_Select(shares):
+    for share in shares:
+        print(share.Date, share.Asset.Symbol,\
+          share.Asset.Company_Name, \
+          share.Amount, share.Total_Value,\
+          share.Type)
+
+def GetLastShareDate_Test(repo):
+    if repo.GetLastShareDate() == date_obj2:
+        print("GetLastShareData_Test - PASSED")
+
 # ***********************************************
 date1 = "2023-06-13"
 date_obj1 = datetime.strptime(date1, '%Y-%m-%d').date()
@@ -52,10 +83,15 @@ repo = AssetRepository(DBConnectionHandler(path))
 repo.Insert(a1)
 repo.Insert(a2)
 
-share1 = Share(date_obj1, 10, 300.00, "Buy", 1)
-share2 = Share(date_obj2, 100, 200.00, "Sale", 2)
+share1 = Share(date_obj1, 10, 300.00, "BUY", 1)
+share2 = Share(date_obj2, 100, 200.00, "SELL", 2)
 repo = ShareRepository(DBConnectionHandler(path))
 repo.Insert(share1)
 repo.Insert(share2)
+
+# ***********************************************
+shares = SelectAll_Test(repo)
+GetLastShareDate_Test(repo)
+# Print_Select(shares)
 
 __RemoveTableFromDatabase()
