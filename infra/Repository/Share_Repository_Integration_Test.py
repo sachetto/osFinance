@@ -10,10 +10,12 @@ from Config.Connection import DBConnectionHandler
 from Entities.Asset import Asset
 from Entities.Category import Category
 from Entities.Share import Share
+from Repository.Category_Repository import CategoryRepository
+from Repository.Asset_Repository import AssetRepository
 from Repository.Share_Repository import ShareRepository
 
 # ***********************************************
-path = "share_test_db.db"
+path = "share_it_db.db"
 
 def __CreateTestDatabase():
     with DBConnectionHandler(path) as db_connection:
@@ -26,45 +28,34 @@ def __RemoveTableFromDatabase():
     with DBConnectionHandler(path) as db_connection:
         engine = db_connection.GetEngine()
         Share.metadata.drop_all(engine)
-
-def InsertAndSelect_Test(s1, s2):
-    repo = ShareRepository(DBConnectionHandler(path))
-
-    dt1 = s1.Date
-    am1 = s1.Amount
-    tv1 = s1.Total_Value
-    tp1 = s1.Type
-    dt2 = s2.Date
-    am2 = s2.Amount
-    tv2 = s2.Total_Value
-    tp2 = s2.Type
-
-    repo.Insert(s1)
-    repo.Insert(s2)
-
-    selection = repo.Select()
-
-    if selection[0].Date == dt1 and\
-       selection[0].Amount == am1 and\
-       selection[0].Total_Value == tv1 and\
-       selection[0].Type == tp1 and\
-       selection[1].Date == dt2 and\
-       selection[1].Amount == am2 and\
-       selection[1].Total_Value == tv2 and\
-       selection[1].Type == tp2:
-        print("InsertAndSelect_Test - PASSED")
-    else:
-        print("InsertAndSelect_Test - FAILED")
-
+        Asset.metadata.drop_all(engine)
+        Category.metadata.drop_all(engine)
 
 # ***********************************************
-date = "2023-06-13"
-date_obj = datetime.strptime(date, '%Y-%m-%d').date()
+date1 = "2023-06-13"
+date_obj1 = datetime.strptime(date1, '%Y-%m-%d').date()
+date2 = "2023-06-23"
+date_obj2 = datetime.strptime(date2, '%Y-%m-%d').date()
 
 __CreateTestDatabase()
 print()
-share1 = Share(date_obj, 10, 300.00, "Buy", 1)
-share2 = Share(date_obj, 100, 200.00, "Sale", 1)
 
-InsertAndSelect_Test(share1, share2)
+ca1 = Category(Category="STOCKS")
+ca2 = Category(Category="REIT")
+repo = CategoryRepository(DBConnectionHandler(path))
+repo.Insert(ca1)
+repo.Insert(ca2)
+
+a1 = Asset("B3SA3", "B3 SA", 0.00, 1)
+a2 = Asset("KNCR11", "FII KINEA RI CI", 0.00, 2)
+repo = AssetRepository(DBConnectionHandler(path))
+repo.Insert(a1)
+repo.Insert(a2)
+
+share1 = Share(date_obj1, 10, 300.00, "Buy", 1)
+share2 = Share(date_obj2, 100, 200.00, "Sale", 2)
+repo = ShareRepository(DBConnectionHandler(path))
+repo.Insert(share1)
+repo.Insert(share2)
+
 __RemoveTableFromDatabase()
