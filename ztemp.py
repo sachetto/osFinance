@@ -23,3 +23,23 @@ class Operation(Base):
 
 # Create the table in the database (if it doesn't exist)
 Base.metadata.create_all(engine)
+
+
+
+
+# ***********************************************
+# Define the options
+options = [
+    ('option 1', 'Option 1'),
+    ('option 2', 'Option 2'),
+    ('option 3', 'Option 3'),
+]
+
+# Show the radiolist dialog
+selected_option = radiolist_dialog(
+    title='Select an option:',
+    text='',
+    values=options,
+).run()
+
+print(f'Selected option: {selected_option}')

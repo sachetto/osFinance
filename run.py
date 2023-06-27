@@ -1,110 +1,95 @@
-from datetime import datetime
-from infra.Repository.Share_Repository import ShareRepository
-from infra.Repository.Asset_Repository import AssetRepository
-from infra.Entities.Asset import Asset
-from infra.Entities.Share import Share
-from infra.Config.Connection import DBConnectionHandler
-from infra.Config.Inspection import DBInspection
+from prompt_toolkit import prompt
+from prompt_toolkit.shortcuts import radiolist_dialog, input_dialog, button_dialog
 
-share_repo = ShareRepository()
-asset_repo = AssetRepository()
+class AppState:
+    def __init__(self):
+        self.__stxtpos = 0
+        self.__soppos = 1
+        self.state = 'screen1'
+        self.handlers = {
+            'screen1': self.handle_screen1,
+            'screen2': self.handle_screen2,
+            'screen3': self.handle_screen3,
+            'screen4': self.handle_screen4,
+            'screen5': self.handle_screen5,
+        }
+        self.screen_texts = {
+            'screen1': ['Select an option in Screen 1:', [('1', 'Option 1'), ('2', 'Option 2')]],
+            'screen2': ['Select an option in Screen 2:', [('1', 'Option 1'), ('2', 'Option 2')]],
+            'screen3': ['Select an option in Screen 3:', [('1', 'Option 1'), ('2', 'Option 2')]],
+            'screen4': ['Enter a value in Screen 4:'],
+            'screen5': ['Press OK to continue in Screen 5.'],
+        }
 
-# data = share_repo.Select()
-# print(data)
+    def handle_input(self, user_input):
+        # handler becomes a reference to the 
+        # corresponding handler method
+        handler = self.handlers.get(self.state)
+        if handler:
+            handler(user_input)
 
-assets_symbol = share_repo.SelectDistinctSymbols()
-# print(assets_symbol)
+    def handle_screen1(self, user_input):
+        if user_input == '1':
+            print('Option 1 selected in Screen 1')
+        elif user_input == '2':
+            print('Option 2 selected in Screen 1')
+            self.state = 'screen2'
 
-asset_and_name = share_repo.SelectDistinctSymbolsAndName()
-# print(asset_and_name)
+    def handle_screen2(self, user_input):
+        if user_input == '1':
+            print('Option 1 selected in Screen 2')
+        elif user_input == '2':
+            print('Option 2 selected in Screen 2')
+            self.state = 'screen3'
 
-asset = share_repo.SelectOperationsFrom("BOVA11")
-# print(asset)
+    def handle_screen3(self, user_input):
+        if user_input == '1':
+            print('Option 1 selected in Screen 3')
+        elif user_input == '2':
+            print('Option 2 selected in Screen 3')
+            self.state = 'screen4'
 
-data = share_repo.GetLastShareData()
-# print(data)
+    def handle_screen4(self, user_input):
+        if user_input:
+            print(f'Input value in Screen 4: {user_input}')
+            self.state = 'screen5'
 
-# *******************************************************
-# Test add new share into repo
-# *******************************************************
-def Test_Add_Share():
-    date = "2023-06-13"
-    date_obj = datetime.strptime(date, '%Y-%m-%d').date()
+    def handle_screen5(self, user_input):
+        if user_input == 'OK':
+            print('OK button pressed in Screen 5')
+            self.state = 'screen1'
 
-    new_share = Share(data=date_obj,
-                      tipo="C",
-                      titulo="OI ON N1",
-                      symbol="OIBR3",
-                      qnt=30.0,
-                      preco=1.2)
-    
-    share_repo.Insert(new_share)
+    def run(self):
+        while True:
+            handler = self.handlers.get(self.state)
+            if handler:
+                handler(None)  # Handle the screen transition
+            else:
+                break
 
-    data = share_repo.Select()
-    print(data[-2])
-    print(data[-1])
+            screen_text = self.screen_texts.get(self.state)
+            if self.state == 'screen4':
+                input_value = input_dialog(
+                    title='Prompt Dialog',
+                    text=screen_text[self.__stxtpos],
+                ).run()
+                self.handle_input(input_value)
+            elif self.state == 'screen5':
+                button_dialog(
+                    title='Prompt Dialog',
+                    text=screen_text[self.__stxtpos],
+                    buttons=[('OK', 'OK')],
+                ).run()
+                self.handle_input('OK')
+            else:
+                selected_option = radiolist_dialog(
+                    title='Prompt Dialog',
+                    text=screen_text[self.__stxtpos],
+                    values=screen_text[self.__soppos],
+                ).run()
 
-# Test_Add_Share()
+                self.handle_input(selected_option)
 
-# *******************************************************
-# From all orders, get distincts Asset and sabe in a 
-# table
-# *******************************************************
-def UpdateAssetTable(asset_list, asset_repo):
-    for asset in asset_list:
-        asset_to_insert = Asset(Symbol=asset[0],\
-                                 Company=asset[1],\
-                                 Price=0.0,\
-                                 Category="UNDEFINED")
-
-        asset_repo.Insert(asset_to_insert)
-
-# UpdateAssetTable(asset_and_name, asset_repo)
-# data = asset_repo.Select()
-# print(data)
-
-
-# *******************************************************
-# Test update table
-# *******************************************************
-def Test_Update():
-    data = asset_repo.SelectSpecific("B3SA3")
-    print(data[0])
-    
-    asset = asset_repo.SelectSpecific("B3SA3")
-
-    new_asset = Asset(Symbol=asset[0].Symbol,\
-                      Company=asset[0].Company,\
-                      Price=0.0,\
-                      Category="asset")
-    
-    asset_repo.Update("B3SA3", new_asset)
-
-    data = asset_repo.SelectSpecific("B3SA3")
-    print(data[0])
-
-# Test_Update()
-
-# *******************************************************
-# Test delete table
-# *******************************************************
-def Test_Delete():
-    data = asset_repo.Select()
-    print(data)
-    
-    asset_repo.Delete("B3SA3")
-
-    data = asset_repo.Select()
-    print(data)
-
-# Test_Delete()
-
-
-# ********** TESTE DO INSPECTOR **********
-with DBConnectionHandler() as db:
-    inspec = DBInspection(db)
-
-    if inspec.TableExists("asset"):
-        print("exist")
-    else:
-        print("does not exist")
+# Example usage
+app_state = AppState()
+app_state.run()
