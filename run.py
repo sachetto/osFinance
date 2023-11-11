@@ -1,7 +1,14 @@
-from infra.Repository.Share_Repository import ShareRepository
+from infra.Screen.Screen_Builder import ScreenBuilder
+from infra.Screen.Screen_State import ScreenState
 
-repo = ShareRepository()
+# defines the main function of the application
+def main():
+    screens = ScreenBuilder()
+    app_state = ScreenState(screens)
 
-data = repo.Select()
+    app_state.Run()
 
-print(data)
+
+
+if __name__ == '__main__':
+    main()

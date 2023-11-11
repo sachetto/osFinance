@@ -36,7 +36,7 @@ class Test_Database:
 
   def Test_QueryWhithWhere(self):
     self.db.Connect()
-    my_list = self.db.QueryWithWhere("ordens", "Ticker", "MOVI3")
+    my_list = self.db.QueryWithWhere("ordens", "Symbol", "MOVI3")
 
     for line in my_list:
       print(line)
@@ -46,7 +46,7 @@ class Test_Database:
   def Test_GetDistinctValues(self):
     self.db.Connect()
 
-    companies = self.db.GetDistinctValues("ordens", "Ticker")
+    companies = self.db.GetDistinctValues("ordens", "Symbol")
     for company in companies:
       print(company[0])
 

@@ -73,7 +73,7 @@ def DefineChavePrimariaNoDaTabela(conexao, tabela, chave):
     cursor = conexao.cursor()
   
     # Create a new table with the desired primary key
-    cursor.execute(f"CREATE TABLE {tabela}_new ({chave} INTEGER PRIMARY KEY AUTOINCREMENT, Data TEXT, Tipo TEXT, Titulo TEXT, Ticker TEXT, Qnt REAL, Preco REAL)")
+    cursor.execute(f"CREATE TABLE {tabela}_new ({chave} INTEGER PRIMARY KEY AUTOINCREMENT, Data TEXT, Tipo TEXT, Titulo TEXT, Symbol TEXT, Qnt REAL, Preco REAL)")
 
     # Copy the data from the original table to the new table
     cursor.execute(f"INSERT INTO {tabela}_new SELECT * FROM {tabela}")
@@ -91,6 +91,14 @@ def DefineChavePrimariaNoDaTabela(conexao, tabela, chave):
 
   except:
     print("Erro ao criar chave primária")
+
+def CriaTabelaDeAsset(conexao):
+  try:
+    cursor = conexao.cursor()
+    cursor.execute(f"CREATE TABLE asset (Id INTEGER PRIMARY KEY AUTOINCREMENT, Symbol TEXT, Company TEXT, Price REAL, Category TEXT)")
+    conexao.commit()
+  except:
+    print("Erro ao criar a tabela de ações")
 
 # ****************************************************************************
 # ****************************************************************************
@@ -111,23 +119,26 @@ def SetupDoBanco():
 
   CriaUmaTabelaDeOrdensNoBancoComBaseNoDataframe(conn, "ordens", df_ordens)
   DefineChavePrimariaNoDaTabela(conn, "ordens", "Indice")
+  CriaTabelaDeAsset(conn)
 
   conn.close()
 
 # ********************************************
 #               Execução:
 # ********************************************
-SetupDoBanco()
+# SetupDoBanco()
 
 
 
 
 
 
-# conn = sqlite3.connect("bancodedados.db")
+conn = sqlite3.connect("bancodedados.db")
+CriaTabelaDeAsset(conn)
+conn.close()
 
 # cursor = conn.cursor()
-# cursor.execute("SELECT DISTINCT Ticker FROM ordens")
+# cursor.execute("SELECT DISTINCT Symbol FROM ordens")
 # companies = cursor.fetchall()
 
 # for company in companies:
@@ -140,6 +151,6 @@ SetupDoBanco()
 # ********************************************
 #               Alguns Testes:
 # ********************************************
-# Test_Stock().Test_Print()
+# Test_Asset().Test_Print()
 # Test_Database().Test_GetDistinctValues()
 # Test_Database().Test_QueryWhithWhere()
